@@ -38,13 +38,10 @@ func RelayServiceRequest(connection string, handler ServiceConnectionHandler) {
     case NewService:
       fmt.Println("Established relay address: ", mess.Data)
     case NewConnectionOnService:
-      // TODO: I think there is a race condition here.
-      // I am told about the new connection before there is someone listening/accepting
       conn, err := net.Dial("tcp", mess.Data)
       if err != nil {
         glog.Exit("Connecting to relay server ", err)
       }
-      // TODO: Probably need to maintain connection, do some channel work
       go handler(conn)
 
     case EndConnectionOnService:
