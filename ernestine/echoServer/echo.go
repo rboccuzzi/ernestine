@@ -2,7 +2,6 @@ package main
 
 import (
   "flag"
-  "fmt"
   "github.com/golang/glog"
   "github.com/rboccuzzi/ernestine/relay"
   "net"
@@ -26,9 +25,8 @@ func main() {
   var relayPort int
   var relayHost string
   flag.IntVar(&relayPort, "port", 9100, "The port to listen to connections for new services to relay")
-  flag.StringVar(&relayHost, "host", "localhost", "he host running the relay server")
+  flag.StringVar(&relayHost, "host", "localhost", "The host running the relay server")
   flag.Parse()
 
-  connectionString := fmt.Sprintf("%s:%d", relayHost, relayPort)
-  relay.RelayServiceRequest(connectionString, echoServerFunctionality)
+  relay.RelayServiceRequest(relayHost, relayPort, echoServerFunctionality)
 }

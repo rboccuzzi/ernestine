@@ -12,10 +12,11 @@ import (
 // Treat this socket as you would a direct connection to the client
 type ServiceConnectionHandler func(conn net.Conn)
 
-// RelayServiceRequest is given the connection string to the relay server, and will manage
+// RelayServiceRequest is given the host/port to the relay server, and will manage
 // all relay server communication. Each time a client connects to the relayed server
 // for this service, a callback to the handler will be made.
-func RelayServiceRequest(connection string, handler ServiceConnectionHandler) {
+func RelayServiceRequest(host string, port int, handler ServiceConnectionHandler) {
+  connection := fmt.Sprintf("%s:%d", host, port)
   glog.V(1).Info("Connecting to relay on ", connection)
   relayServerConn, err := net.Dial("tcp", connection)
   if err != nil {
@@ -36,9 +37,11 @@ func RelayServiceRequest(connection string, handler ServiceConnectionHandler) {
 
     switch mess.Action {
     case NewService:
-      fmt.Println("Established relay address: ", mess.Data)
+      exposedAddress := fmt.Sprintf("%s:%s", host, mess.Data)
+      fmt.Println("Established relay address:", exposedAddress)
     case NewConnectionOnService:
-      conn, err := net.Dial("tcp", mess.Data)
+      relayAddress := fmt.Sprintf("%s:%s", host, mess.Data)
+      conn, err := net.Dial("tcp", relayAddress)
       if err != nil {
         glog.Exit("Connecting to relay server ", err)
       }
