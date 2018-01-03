@@ -1,0 +1,19 @@
+{
+  "folders":
+  [{
+    "path": "."
+  }],
+  "build_systems":
+  [{
+    "name": "Run with Logging Info",
+    "cmd": ["go", "run", "$file", "--stderrthreshold=INFO"]
+  },
+  {
+    "name": "Run with Logging Info V2",
+    "cmd": ["go", "run", "$file", "--stderrthreshold=INFO", "-v", "2"]
+  },
+  {
+    "name": "Run with Logging Warning",
+    "cmd": ["go", "run", "$file", "--stderrthreshold=WARNING"]
+  }]
+}
